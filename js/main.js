@@ -20,11 +20,15 @@ $(document).ready(function(){
 	});
 	// Calculate the results
 	$("#btnCalculate").click(function(){
+		// associated value of language multiplied by function points
 		var sloc = parseInt($("#inputFp").val())*parseInt($("#langSelect").val());
+		// determines effort by a percentage of slider value
 		var effort = $( "#effortSlider" ).slider( "value" )/100;
+		// complexity values range 1 to 10
 		var complexity = 1+(($( "#complexitySlider" ).slider( "value" )*0.024));
 		// Constant has gone up from 1998 and this reflects the change
 		var personMonth = 3 * effort * Math.pow((sloc/1000),complexity);
+		// user cost per person month * caluclated personMonth
 		var cost = personMonth * parseInt($("#inCpp").val());
 		var coefficient = (3+(Math.log(sloc)/Math.LN10)/10)/10;
 		var schedule = 3.2 * Math.pow(personMonth,coefficient);
@@ -37,6 +41,7 @@ $(document).ready(function(){
 		$("#results").show();
 	});
 	$("#btnExport").click(function(){
+		// store all form values into variables and POST in URL string to PHP file
 		var fp = $("#inputFp").val();
 		var lang = $("#langSelect").prop("selectedIndex");
 		var cpp = $("#inCpp").val();
@@ -51,6 +56,7 @@ $(document).ready(function(){
 		var type = file.type;
 	});
 	$("#btnUpload").click(function(){
+		// form data fetched through an AJAX call to server
 		var formData = new FormData($("#uploadform")[0]);
 		formData.append('file',$("#file")[0].files[0]);
 
@@ -74,6 +80,7 @@ $(document).ready(function(){
 });
 
 function importValues(data){
+	// take the JSON data and parse out each matching case string with a value on the page from stored CSV file
 	var data = $.parseJSON(data);
 	for(var i=0;i<data.length;i++){
 		switch(data[i][0]){
@@ -98,6 +105,7 @@ function importValues(data){
 
 // Values from: http://www.qsm.com/resources/function-point-languages-table
 function createOptions(){
+	// build selection option selection dynamically
 	var optionStr="<select class='form-control' id='langSelect'>";
 	for(var i=0;i<options.length;i++){
 		optionStr+="<option value="+options[i].value+">"+options[i].name+"</option>";
@@ -107,6 +115,7 @@ function createOptions(){
 }
 
 function getOption(name){
+	// return option value of selected name
 	for(var i=0;i<options.length;i++){
 		if(options[i].name === name){
 			return options[i].value;
@@ -116,6 +125,7 @@ function getOption(name){
 }
 
 function initVariables(){
+	// computer language selection options
 	options = [
 		{name:'ASP',value:51},
 		{name:'Assembler',value:119},
